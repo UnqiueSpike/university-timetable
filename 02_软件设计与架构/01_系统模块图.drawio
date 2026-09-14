@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="system-modules" name="系统模块图">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="系统模块图" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fontFamily=Helvetica;fontSize=16;fontColor=#2d3142;fillColor=#ffffff;strokeColor=#4f5d75;spacing=12;strokeColor=none;fillColor=none;fontSize=28;fontStyle=1;align=left;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="48" y="24" width="1080" height="48" />
+        </mxCell>
+        <mxCell id="boundary" value="后端应用 · 模块化单体（建议方案）" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fontFamily=Helvetica;fontSize=16;fontColor=#2d3142;fillColor=#ffffff;strokeColor=#4f5d75;spacing=12;verticalAlign=top;align=left;dashed=1;fillColor=#f5f5f5;strokeColor=#bfc0c0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="48" y="100" width="1080" height="560" />
+        </mxCell>
+        <mxCell id="auth" value="身份认证与权限&#10;统一提供身份与权限校验，贯穿受保护的业务操作及同步通知" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fontFamily=Helvetica;fontSize=16;fontColor=#2d3142;fillColor=#ffffff;strokeColor=#4f5d75;spacing=12;fillColor=#ececec;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="96" y="160" width="984" height="80" />
+        </mxCell>
+        <mxCell id="staff" value="教职员工管理&#10;Dashboard · 批准字段维护 · 修改审计" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fontFamily=Helvetica;fontSize=16;fontColor=#2d3142;fillColor=#ffffff;strokeColor=#4f5d75;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="96" y="292" width="240" height="96" />
+        </mxCell>
+        <mxCell id="share" value="分享与比较&#10;同意与授权范围 · 课程表比较" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fontFamily=Helvetica;fontSize=16;fontColor=#2d3142;fillColor=#ffffff;strokeColor=#4f5d75;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="456" y="292" width="240" height="96" />
+        </mxCell>
+        <mxCell id="announce" value="公告&#10;创建 · 编辑 · 发布 · 撤回&#10;按课程或群体确定可见范围" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fontFamily=Helvetica;fontSize=16;fontColor=#2d3142;fillColor=#ffffff;strokeColor=#4f5d75;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="816" y="292" width="240" height="96" />
+        </mxCell>
+        <mxCell id="data" value="数据接入&#10;适配器 · 校验 · 字段转换&#10;通过数据访问层写入统一模型" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fontFamily=Helvetica;fontSize=16;fontColor=#2d3142;fillColor=#ffffff;strokeColor=#4f5d75;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="96" y="508" width="240" height="112" />
+        </mxCell>
+        <mxCell id="course" value="课程表与容量&#10;个人课表 · 详情 · 名额&#10;数据来源与验证状态" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fontFamily=Helvetica;fontSize=16;fontColor=#2d3142;fillColor=#ffffff;strokeColor=#4f5d75;spacing=12;fillColor=#fff4ec;strokeColor=#eb6c36;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="456" y="508" width="240" height="112" />
+        </mxCell>
+        <mxCell id="sync" value="更新同步&#10;保存成功后通知获授权界面&#10;具体同步方式待评估" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fontFamily=Helvetica;fontSize=16;fontColor=#2d3142;fillColor=#ffffff;strokeColor=#4f5d75;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="816" y="508" width="240" height="112" />
+        </mxCell>
+        <mxCell id="source" value="批准的数据源&#10;正式接口 / 数据集 / Mock API" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fontFamily=Helvetica;fontSize=16;fontColor=#2d3142;fillColor=#ffffff;strokeColor=#4f5d75;spacing=12;fillColor=#ececec;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="96" y="740" width="240" height="80" />
+        </mxCell>
+        <mxCell id="front" value="学生端 / 教职员工端&#10;接收更新后重新查询" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fontFamily=Helvetica;fontSize=16;fontColor=#2d3142;fillColor=#ffffff;strokeColor=#4f5d75;spacing=12;fillColor=#ececec;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="816" y="740" width="240" height="80" />
+        </mxCell>
+        <mxCell id="e1" value="读取获准课程表" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=0;endArrow=block;endFill=1;fontSize=12;fontFamily=Helvetica;strokeColor=#4f5d75;fontColor=#4f5d75;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="share" target="course">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="e2" value="查询 / 维护批准信息" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=0;endArrow=block;endFill=1;fontSize=12;fontFamily=Helvetica;strokeColor=#4f5d75;fontColor=#4f5d75;labelBackgroundColor=#ffffff;exitX=1;exitY=0.65;entryX=0;entryY=0.3;" edge="1" parent="1" source="staff" target="course">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="396" y="354" />
+              <mxPoint x="396" y="542" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e3" value="发布或撤回成功" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=0;endArrow=block;endFill=1;fontSize=12;fontFamily=Helvetica;strokeColor=#4f5d75;fontColor=#4f5d75;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;dashed=1;" edge="1" parent="1" source="announce" target="sync">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="e4" value="修改保存成功" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=0;endArrow=block;endFill=1;fontSize=12;fontFamily=Helvetica;strokeColor=#4f5d75;fontColor=#4f5d75;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;dashed=1;" edge="1" parent="1" source="course" target="sync">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="e5" value="读取批准数据" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=0;endArrow=block;endFill=1;fontSize=12;fontFamily=Helvetica;strokeColor=#4f5d75;fontColor=#4f5d75;labelBackgroundColor=#ffffff;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="source" target="data">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="e6" value="数据保存成功后触发更新" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=0;endArrow=block;endFill=1;fontSize=12;fontFamily=Helvetica;strokeColor=#4f5d75;fontColor=#4f5d75;labelBackgroundColor=#ffffff;exitX=1;exitY=0.8;entryX=0.2;entryY=1;dashed=1;" edge="1" parent="1" source="data" target="sync">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="372" y="598" />
+              <mxPoint x="372" y="696" />
+              <mxPoint x="864" y="696" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e7" value="通知更新" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=0;endArrow=block;endFill=1;fontSize=12;fontFamily=Helvetica;strokeColor=#4f5d75;fontColor=#4f5d75;labelBackgroundColor=#ffffff;exitX=0.7;exitY=1;entryX=0.7;entryY=0;dashed=1;" edge="1" parent="1" source="sync" target="front">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="legend" value="实线：调用或数据读取    虚线：更新触发或通知&#10;仅展示模块主要关系；前端 API 调用、数据存储及完整授权路径见分层图和时序图。" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fontFamily=Helvetica;fontSize=16;fontColor=#2d3142;fillColor=#ffffff;strokeColor=#4f5d75;spacing=12;strokeColor=none;fillColor=none;fontSize=12;align=left;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="360" y="744" width="416" height="88" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
