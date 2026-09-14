@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="erd-1" name="身份与权限">
+    <mxGraphModel page="1" pageWidth="1800" pageHeight="1150">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="身份与权限" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=20;fillColor=none;strokeColor=none;align=left;fontSize=32;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="48" y="20" width="1700" height="56" />
+        </mxCell>
+        <mxCell id="rel0" style="rounded=1;endArrow=none;startArrow=none;strokeColor=#7a8399;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="520" y="240" />
+            <mxPoint as="targetPoint" x="660" y="240" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="card0_0" value="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=20;fillColor=#ffffff;strokeColor=none;align=left;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="534.0" y="212.0" width="18.0" height="26" />
+        </mxCell>
+        <mxCell id="card0_1" value="0..N" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=20;fillColor=#ffffff;strokeColor=none;align=left;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="610.0" y="212.0" width="41.0" height="26" />
+        </mxCell>
+        <mxCell id="rel1" style="rounded=1;endArrow=none;startArrow=none;strokeColor=#7a8399;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="1240" y="240" />
+            <mxPoint as="targetPoint" x="1100" y="240" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="card1_0" value="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=20;fillColor=#ffffff;strokeColor=none;align=left;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1190.0" y="212.0" width="18.0" height="26" />
+        </mxCell>
+        <mxCell id="card1_1" value="0..N" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=20;fillColor=#ffffff;strokeColor=none;align=left;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1114.0" y="212.0" width="41.0" height="26" />
+        </mxCell>
+        <mxCell id="rel2" style="rounded=1;endArrow=none;startArrow=none;strokeColor=#7a8399;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="880" y="450" />
+            <mxPoint as="targetPoint" x="880" y="320" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="card2_0" value="0..1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=20;fillColor=#ffffff;strokeColor=none;align=left;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="890.0" y="408.0" width="38.0" height="26" />
+        </mxCell>
+        <mxCell id="card2_1" value="0..N" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=20;fillColor=#ffffff;strokeColor=none;align=left;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="890.0" y="342.0" width="41.0" height="26" />
+        </mxCell>
+        <mxCell id="rel3" style="rounded=1;endArrow=none;startArrow=none;strokeColor=#7a8399;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="1460" y="320" />
+            <mxPoint as="targetPoint" x="1460" y="450" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="card3_0" value="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=20;fillColor=#ffffff;strokeColor=none;align=left;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1470.0" y="342.0" width="18.0" height="26" />
+        </mxCell>
+        <mxCell id="card3_1" value="0..N" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=20;fillColor=#ffffff;strokeColor=none;align=left;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1470.0" y="408.0" width="41.0" height="26" />
+        </mxCell>
+        <mxCell id="rel4" style="rounded=1;endArrow=none;startArrow=none;strokeColor=#7a8399;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="1460" y="740" />
+            <mxPoint as="targetPoint" x="1460" y="610" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="card4_0" value="1" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=20;fillColor=#ffffff;strokeColor=none;align=left;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1470.0" y="698.0" width="18.0" height="26" />
+        </mxCell>
+        <mxCell id="card4_1" value="0..N" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=20;fillColor=#ffffff;strokeColor=none;align=left;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1470.0" y="632.0" width="41.0" height="26" />
+        </mxCell>
+        <mxCell id="user" value="User｜用户&#10;&#10;PK id" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=20;fillColor=#ffffff;strokeColor=#4f5d75;align=left;spacing=16;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="80" y="160" width="440" height="160" />
+        </mxCell>
+        <mxCell id="assign" value="UserRole｜用户角色&#10;&#10;PK id · FK user_id / role_id / course_id&#10;scope_type" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=20;fillColor=#ffffff;strokeColor=#4f5d75;align=left;spacing=16;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="660" y="160" width="440" height="160" />
+        </mxCell>
+        <mxCell id="role" value="Role｜角色&#10;&#10;PK id · name" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=20;fillColor=#ffffff;strokeColor=#4f5d75;align=left;spacing=16;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1240" y="160" width="440" height="160" />
+        </mxCell>
+        <mxCell id="course" value="Course｜科目&#10;&#10;PK id" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=20;fillColor=#ffffff;strokeColor=#4f5d75;align=left;spacing=16;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="660" y="450" width="440" height="160" />
+        </mxCell>
+        <mxCell id="rp" value="RolePermission｜角色权限&#10;&#10;PK/FK role_id + permission_id" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=20;fillColor=#ffffff;strokeColor=#4f5d75;align=left;spacing=16;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1240" y="450" width="440" height="160" />
+        </mxCell>
+        <mxCell id="perm" value="Permission｜权限&#10;&#10;PK id · code" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=20;fillColor=#ffffff;strokeColor=#4f5d75;align=left;spacing=16;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1240" y="740" width="440" height="160" />
+        </mxCell>
+        <mxCell id="notes" value="1：一个；0..N：零到多个；0..1：可选的一个。&#10;UserRole → Course 为 0..1：只有科目范围授权关联一个科目；其余外键均为必填。" style="html=0;whiteSpace=wrap;fontFamily=Helvetica;fontSize=20;fillColor=none;strokeColor=none;align=left;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="48" y="1000" width="1700" height="100" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
