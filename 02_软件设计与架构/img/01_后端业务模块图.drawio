@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <mxfile host="app.diagrams.net" type="device">
-  <diagram id="system-modules" name="系统模块图">
+  <diagram id="system-modules" name="后端业务模块图">
     <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="900" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="title" value="系统模块图" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fontFamily=Helvetica;fontSize=16;fontColor=#2d3142;fillColor=#ffffff;strokeColor=#4f5d75;spacing=12;strokeColor=none;fillColor=none;fontSize=28;fontStyle=1;align=left;" vertex="1" parent="1">
+        <mxCell id="title" value="后端业务模块图" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fontFamily=Helvetica;fontSize=16;fontColor=#2d3142;fillColor=#ffffff;strokeColor=#4f5d75;spacing=12;strokeColor=none;fillColor=none;fontSize=28;fontStyle=1;align=left;" vertex="1" parent="1">
           <mxGeometry as="geometry" x="48" y="24" width="1080" height="48" />
         </mxCell>
         <mxCell id="boundary" value="后端应用 · 模块化单体（建议方案）" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fontFamily=Helvetica;fontSize=16;fontColor=#2d3142;fillColor=#ffffff;strokeColor=#4f5d75;spacing=12;verticalAlign=top;align=left;dashed=1;fillColor=#f5f5f5;strokeColor=#bfc0c0;" vertex="1" parent="1">
