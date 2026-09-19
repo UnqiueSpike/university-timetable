@@ -97,3 +97,7 @@ GitHub Actions 在 push 和 pull request 上执行 `npm ci`、`npm run check`、
 人工验收：在桌面与窄屏打开首页，检查插画、表单与页脚，使用 Tab 导航，输入演示邮箱和密码、切换密码显示和复选框，再点击 Sign In 验证真实登录；Forgot password? 和 Sign up 应显示受控开通/联系支持提示。
 
 配置参考：[Next.js 安装文档](https://nextjs.org/docs/app/getting-started/installation)、[shadcn/ui Next.js 文档](https://ui.shadcn.com/docs/installation/next)。后续施工顺序见 `03_施工步骤/01_施工计划.md`。
+
+## 教师维护与公告（第五步）
+
+教师登录后可维护授权课程的补充信息，创建/编辑/发布/撤回公告，并在独立授权范围内查看审计。学生入口新增目标公告列表。规则、接口和复验方法见 [教师维护说明](app/docs/staff.md)。先运行迁移及 db:seed，以建立新增表和本地教师操作权限。

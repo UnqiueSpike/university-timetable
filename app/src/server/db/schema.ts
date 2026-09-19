@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { boolean, check, foreignKey, index, integer, pgEnum, pgTable, text, timestamp, unique, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import { boolean, check, foreignKey, index, integer, jsonb, pgEnum, pgTable, text, timestamp, unique, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 
 const instant = (name: string) => timestamp(name, { withTimezone: true, mode: "date" });
 const id = () => uuid("id").defaultRandom().primaryKey();
@@ -92,3 +92,36 @@ export const verification = pgTable("verification", {
   id: text("id").primaryKey(), identifier: text("identifier").notNull(), value: text("value").notNull(),
   expiresAt: instant("expires_at").notNull(), createdAt: instant("created_at").defaultNow().notNull(), updatedAt: instant("updated_at").defaultNow().notNull(),
 }, t => [index("verification_identifier_idx").on(t.identifier)]);
+
+
+export const userGroups = pgTable("user_group", { id: id(), name: text("name").notNull(), active: boolean("active").default(true).notNull() });
+export const groupMembers = pgTable("group_member", {
+  id: id(), groupId: uuid("group_id").notNull().references(() => userGroups.id), userId: text("user_id").notNull().references(() => user.id), active: boolean("active").default(true).notNull(),
+}, t => [unique().on(t.groupId, t.userId)]);
+export const staffPermissions = pgTable("staff_permission", {
+  id: id(), userId: text("user_id").notNull().references(() => user.id), permission: text("permission").notNull(),
+  courseId: uuid("course_id").references(() => courses.id), groupId: uuid("group_id").references(() => userGroups.id),
+}, t => [check("permission_scope", sql`(${t.courseId} IS NOT NULL) <> (${t.groupId} IS NOT NULL)`),
+  check("permission_name", sql`${t.permission} IN ('supplement.write', 'announcement.manage', 'audit.read') AND (${t.permission} <> 'supplement.write' OR ${t.courseId} IS NOT NULL)`),
+  unique().on(t.userId, t.permission, t.courseId), unique().on(t.userId, t.permission, t.groupId)]);
+export const supplements = pgTable("supplement", {
+  id: id(), entryId: uuid("entry_id").notNull().references(() => timetableEntries.id), content: text("content").notNull(),
+  authorId: text("author_id").notNull().references(() => user.id), updatedBy: text("updated_by").notNull().references(() => user.id),
+  updatedAt: instant("updated_at").defaultNow().notNull(), revision: integer("revision").default(1).notNull(),
+}, t => [check("supplement_revision", sql`${t.revision} > 0`), check("supplement_content", sql`length(trim(${t.content})) BETWEEN 1 AND 5000`), index("supplement_entry_idx").on(t.entryId)]);
+export const announcements = pgTable("announcement", {
+  id: id(), authorId: text("author_id").notNull().references(() => user.id), title: text("title").notNull(), body: text("body").notNull(),
+  status: text("status").default("draft").notNull(), revision: integer("revision").default(1).notNull(),
+  createdAt: instant("created_at").defaultNow().notNull(), updatedAt: instant("updated_at").defaultNow().notNull(), publishedAt: instant("published_at"), withdrawnAt: instant("withdrawn_at"),
+}, t => [check("announcement_revision", sql`${t.revision} > 0`), check("announcement_content", sql`length(trim(${t.title})) BETWEEN 1 AND 200 AND length(trim(${t.body})) BETWEEN 1 AND 5000`),
+  check("announcement_state", sql`(${t.status} = 'draft' AND ${t.publishedAt} IS NULL AND ${t.withdrawnAt} IS NULL) OR (${t.status} = 'published' AND ${t.publishedAt} IS NOT NULL AND ${t.withdrawnAt} IS NULL) OR (${t.status} = 'withdrawn' AND ${t.publishedAt} IS NOT NULL AND ${t.withdrawnAt} >= ${t.publishedAt})`), index("announcement_visible_idx").on(t.status, t.publishedAt, t.id)]);
+export const announcementTargets = pgTable("announcement_target", {
+  id: id(), announcementId: uuid("announcement_id").notNull().references(() => announcements.id),
+  courseId: uuid("course_id").references(() => courses.id), classId: uuid("class_id").references(() => classes.id), groupId: uuid("group_id").references(() => userGroups.id),
+}, t => [check("announcement_target_one", sql`num_nonnulls(${t.courseId}, ${t.classId}, ${t.groupId}) = 1`), unique().on(t.announcementId, t.courseId), unique().on(t.announcementId, t.classId), unique().on(t.announcementId, t.groupId)]);
+export const auditEvents = pgTable("audit_event", {
+  id: id(), actorId: text("actor_id").notNull().references(() => user.id), action: text("action").notNull(), resource: text("resource").notNull(), entityId: uuid("entity_id").notNull(),
+  occurredAt: instant("occurred_at").defaultNow().notNull(), requestId: text("request_id").notNull(),
+  courseIds: uuid("course_ids").array().default(sql`'{}'::uuid[]`).notNull(), groupIds: uuid("group_ids").array().default(sql`'{}'::uuid[]`).notNull(),
+  before: jsonb("before").$type<Record<string, unknown> | null>(), after: jsonb("after").$type<Record<string, unknown>>().notNull(),
+}, t => [index("audit_time_idx").on(t.occurredAt, t.id)]);
