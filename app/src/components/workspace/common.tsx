@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import {useSyncRevision} from "../auth/sync-provider";
 import * as Dialog from "@radix-ui/react-dialog";
 import { TRPCClientError } from "@trpc/client";
 export function message(error:unknown) {
@@ -11,8 +12,9 @@ export function message(error:unknown) {
   return "Unable to complete this request. Please try again.";
 }
 export function useRemote<T>(load:()=>Promise<T>, revision=0): {value?:T;error?:string} {
+  const syncRevision=useSyncRevision();
   const [result,setResult]=useState<{load:typeof load;revision:number;value?:T;error?:string}>();
-  useEffect(()=>{let active=true;load().then(value=>{if(active)setResult({load,revision,value});}).catch(error=>{if(active)setResult({load,revision,error:message(error)});});return()=>{active=false;};},[load,revision]);
+  useEffect(()=>{let active=true;load().then(value=>{if(active)setResult({load,revision,value});}).catch(error=>{if(active)setResult({load,revision,error:message(error)});});return()=>{active=false;};},[load,revision,syncRevision]);
   return result?.load===load&&result.revision===revision?result:{};
 }
 export async function allPages<T>(load:(cursor?:string)=>Promise<{items:T[];nextCursor:string|null}>) {const rows:T[]=[],seen=new Set<string>();let cursor:string|undefined;do{const p=await load(cursor);rows.push(...p.items);cursor=p.nextCursor??undefined;if(cursor){if(seen.has(cursor))throw new Error("Pagination did not advance");seen.add(cursor);}}while(cursor);return rows;}

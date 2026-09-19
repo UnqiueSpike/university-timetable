@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { TRPCClientError } from "@trpc/client";
+import { SyncProvider } from "./sync-provider";
 import { authClient } from "@/lib/auth-client";
 import { api } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
@@ -29,8 +30,9 @@ export function SessionFrame({ principal, children }: { principal: Principal; ch
     };
     const timer = window.setInterval(check, 15000);
     window.addEventListener("focus", check);
+    window.addEventListener("unischedule:invalidate", check);
     window.addEventListener("online", check);
-    return () => { active = false; clearInterval(timer); window.removeEventListener("focus", check); window.removeEventListener("online", check); };
+    return () => { active = false; clearInterval(timer); window.removeEventListener("focus", check); window.removeEventListener("unischedule:invalidate", check); window.removeEventListener("online", check); };
   }, [principal]);
   async function signOut() {
     setHidden(true);
@@ -54,6 +56,6 @@ export function SessionFrame({ principal, children }: { principal: Principal; ch
       </nav>
     </header>
     {notice && <div role="alert" className="p-6 text-sm">{notice} <Button variant="link" size="sm" onClick={() => router.refresh()}>Retry</Button></div>}
-    {!hidden && children}
+    <SyncProvider userId={principal.id}>{!hidden && children}</SyncProvider>
   </div>;
 }

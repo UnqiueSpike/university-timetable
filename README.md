@@ -105,3 +105,7 @@ GitHub Actions 在 push 和 pull request 上执行 `npm ci`、`npm run check`、
 ## 分享与比较（第六步）
 
 学生入口提供 Shared Timetables / Compare Timetables。合成账户 A 和 B 可以互相选择，empty 账户不能读取其分享。支持忙闲或完整课程字段、明确同意、期限、复制链接和撤销；接收人必须登录。详见 [分享权限与验收](app/docs/sharing.md)。
+
+## 更新同步（第七步）
+
+在第二个终端进入 app 执行 `npm run sync:dev`，并在 .env.local 设置 NEXT_PUBLIC_ZERO_CACHE_URL（见示例）。首次启用前重启本地 PostgreSQL，使逻辑复制生效。界面显示连接状态；业务修改、撤销及权限变化通过 Zero 通知重新执行授权查询。运行 `npm run test:sync` 可重做隔离的双客户端实验。详见 [同步架构与结果](app/docs/sync.md)。
