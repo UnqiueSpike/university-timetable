@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Sign in · UniSchedule",
-  description: "Your university timetable, in one place. UniSchedule sign-in interface preview.",
+  description: "Your university timetable, in one place. Sign in to your university timetable.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

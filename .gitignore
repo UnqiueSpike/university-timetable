@@ -9,3 +9,4 @@ coverage/
 !.env.example
 .vercel/
 .local-postgres/
+.local-accounts.json

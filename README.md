@@ -1,6 +1,6 @@
 # UniSchedule 课程表系统
 
-当前完成第一步的应用界面基础及第二步的 PostgreSQL、Drizzle 迁移和合成测试数据接入。**尚未实现登录、注册、密码重置、设备记忆、会话或权限验证。** 表单只演示输入、密码显隐和提示，不发送或保存凭据；请勿用真实密码演示。
+当前完成前三步：应用界面基础、PostgreSQL 测试数据、Better Auth 登录与 tRPC 服务端授权。学生和教师可使用本地测试账户真实登录、退出；公开注册、密码恢复和大学身份核实尚未接入。
 
 ## 项目结构
 
@@ -28,7 +28,7 @@ app/                    独立 Next.js 工程
 .github/workflows/       类型、代码和正式构建检查
 ```
 
-`src/server/auth` 和 `api` 随第三步认证及后续 tRPC 接入建立。内部读取函数未开放为 HTTP 接口，也不代表鉴权完成。
+`src/server/auth` 提供真实会话与共用授权，`src/server/api` 提供 tRPC account.me 和限定课程范围的教师入口。
 
 ## 环境与安装
 
@@ -62,6 +62,10 @@ npm run test:db            # 独立临时数据库，测试后自动清理
 
 详细环境说明、身份衔接、全量/增量/故障处理及测试记录见 [数据库说明](app/docs/database.md)。当前只有合成测试来源，**FR-01 批准数据源验收仍待数据负责人确认**；不会将测试数据标记为 verified 或 official。
 
+## 登录与权限
+
+按 [认证说明](app/docs/auth.md) 设置随机 BETTER_AUTH_SECRET 和 BETTER_AUTH_URL，执行 `npm run auth:seed`，再启动应用。随机测试凭据存于被 Git 忽略的 `app/.local-accounts.json`；重复执行不会重设密码。
+
 ## 检查与正式运行
 
 以下命令均在 `app/` 下执行：
@@ -80,10 +84,10 @@ GitHub Actions 在 push 和 pull request 上执行 `npm ci`、`npm run check`、
 
 设计来源：[Figma 登录页 26:4](https://www.figma.com/design/F9PdvZ2BAiF2pOJ6lmr6uY/Untitled?node-id=26-4)。保留英文文案、校园插画、半透明面板、Geist 字体、主色 `#e64626`、文字 `#111111` / `#666666`、边框 `#e5e5e5`、输入框/按钮 10px 圆角、面板 20px 圆角，以及 8/16/20/32px 常用间距。
 
-原画板固定为 1440×900；实现使用弹性高度，并修正原稿 420px 表单超出面板内容区的问题。1024px 以下改为顶部校园图与单列表单，320px 宽度仍可使用。增加了预览提示、键盘焦点和表单标签；未假装实现认证。记住设备仅切换当前页面复选框，不持久化。
+原画板固定为 1440×900；实现使用弹性高度，并修正原稿 420px 表单超出面板内容区的问题。1024px 以下改为顶部校园图与单列表单，320px 宽度仍可使用。增加了预览提示、键盘焦点和表单标签；第三步已接入真实认证；记住设备交由 Better Auth 控制 cookie 持久性。
 
 样式变量集中在 `app/src/app/globals.css`；共用 `Button`、`Input`、`FormField` 位于 `src/components/ui/`。`components.json` 已配置 shadcn/ui 的别名和 Tailwind 4 CSS 入口；按钮使用其 CVA / Radix Slot 组合方式，可按需扩展组件。Geist 通过 `@fontsource/geist` 本地打包，正式构建不依赖 Google Fonts 网络请求。Figma 原始资源保存于 `public/images/`，不依赖七天有效的临时地址。
 
-人工验收：在桌面与窄屏打开首页，检查插画、表单与页脚，使用 Tab 导航，输入演示邮箱和密码、切换密码显示和复选框，再点击 Sign In、Forgot password?、Sign up，确认只显示预览提示，没有真实登录或跳转。
+人工验收：在桌面与窄屏打开首页，检查插画、表单与页脚，使用 Tab 导航，输入演示邮箱和密码、切换密码显示和复选框，再点击 Sign In 验证真实登录；Forgot password? 和 Sign up 应显示受控开通/联系支持提示。
 
 配置参考：[Next.js 安装文档](https://nextjs.org/docs/app/getting-started/installation)、[shadcn/ui Next.js 文档](https://ui.shadcn.com/docs/installation/next)。后续施工顺序见 `03_施工步骤/01_施工计划.md`。

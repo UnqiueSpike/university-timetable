@@ -56,9 +56,9 @@ describe("PostgreSQL migrations and timetable ingestion", { concurrency: false }
   });
   it("creates a fresh database and can apply migrations twice", async () => {
     const { rows } = await pool.query("SELECT count(*)::int AS n FROM drizzle.__drizzle_migrations");
-    assert.equal(rows[0].n, 1);
+    assert.ok(rows[0].n >= 2);
     assert.equal((await pool.query('SELECT count(*)::int AS n FROM "user"')).rows[0].n, 4);
-    assert.equal((await pool.query("SELECT to_regclass('public.account') AS account")).rows[0].account, null);
+    assert.equal((await pool.query('SELECT count(*)::int AS n FROM account')).rows[0].n, 0);
   });
   it("repeated seeds preserve record IDs and counts, including capacity history", async () => {
     const before = await db.select().from(timetableEntries);

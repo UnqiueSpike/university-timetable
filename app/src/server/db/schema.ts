@@ -8,7 +8,7 @@ export const verificationStatus = pgEnum("verification_status", ["verified", "un
 export const recordStatus = pgEnum("record_status", ["active", "cancelled"]);
 export const membershipStatus = pgEnum("membership_status", ["active", "inactive"]);
 
-// Better Auth's canonical user model. Account/session/verification are added in step 3.
+// Better Auth and all business relations share this canonical user model.
 export const user = pgTable("user", {
   id: text("id").primaryKey(), name: text("name").notNull(), email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").default(false).notNull(), image: text("image"),
@@ -74,3 +74,21 @@ export const syncScopes = pgTable("sync_scope", {
   version: integer("version").default(0).notNull(), digest: text("digest"), lastSuccessAt: instant("last_success_at"),
   lastAttemptAt: instant("last_attempt_at"), lastError: text("last_error"),
 }, t => [unique().on(t.sourceId, t.term), check("sync_version_nonnegative", sql`${t.version} >= 0`)]);
+
+export const session = pgTable("session", {
+  id: text("id").primaryKey(), token: text("token").notNull().unique(),
+  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+  expiresAt: instant("expires_at").notNull(), createdAt: instant("created_at").defaultNow().notNull(), updatedAt: instant("updated_at").defaultNow().notNull(),
+  ipAddress: text("ip_address"), userAgent: text("user_agent"),
+}, t => [index("session_user_idx").on(t.userId)]);
+export const account = pgTable("account", {
+  id: text("id").primaryKey(), userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+  providerId: text("provider_id").notNull(), accountId: text("account_id").notNull(), password: text("password"),
+  accessToken: text("access_token"), refreshToken: text("refresh_token"), idToken: text("id_token"), scope: text("scope"),
+  accessTokenExpiresAt: instant("access_token_expires_at"), refreshTokenExpiresAt: instant("refresh_token_expires_at"),
+  createdAt: instant("created_at").defaultNow().notNull(), updatedAt: instant("updated_at").defaultNow().notNull(),
+}, t => [unique().on(t.providerId, t.accountId), index("account_user_idx").on(t.userId)]);
+export const verification = pgTable("verification", {
+  id: text("id").primaryKey(), identifier: text("identifier").notNull(), value: text("value").notNull(),
+  expiresAt: instant("expires_at").notNull(), createdAt: instant("created_at").defaultNow().notNull(), updatedAt: instant("updated_at").defaultNow().notNull(),
+}, t => [index("verification_identifier_idx").on(t.identifier)]);
