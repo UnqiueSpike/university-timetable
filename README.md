@@ -1,6 +1,6 @@
 # UniSchedule 课程表系统
 
-当前完成前四步应用流程：真实登录、服务端授权、本人周课表与课程详情。学生之间的数据隔离、容量 null/0、来源状态和窄屏布局已验证。Zero 完成独立小规模实验，尚未接入产品；大学 AWS 环境待提供。公开注册、密码恢复和大学身份核实尚未接入。
+第一至第七步的本地应用流程已实现：登录与授权、本人课表、教师补充、目标公告与审计、指定接收人分享、比较、撤销及 Zero 自动更新。第八步提供 Terraform 配置、运维说明和本地恢复演练；尚未部署大学 AWS，尚未由接管人员验收。批准数据源、客户同步 SLA、正式身份开通仍待大学确认。公开注册、密码恢复和 SSO 未开放。
 
 ## 项目结构
 
@@ -25,7 +25,9 @@ app/                    独立 Next.js 工程
   components.json       shadcn/ui 配置
   .env.example          无密钥的环境变量说明
   package-lock.json     npm 依赖锁定文件
-.github/workflows/       类型、代码和正式构建检查
+infra/terraform/         大学私有 AWS 试点配置及 Provider 锁文件
+ops/                    部署、迁移、回滚及恢复流程
+.github/workflows/       类型、代码、构建、数据库及 IaC 检查
 ```
 
 `src/server/auth` 提供真实会话与共用授权，`src/server/api` 提供 tRPC account.me、timetable.mine/getEntry 和限定课程范围的教师入口。
@@ -43,7 +45,7 @@ npm ci
 npm run dev
 ```
 
-打开 <http://localhost:3000>。当前首页就是登录页。静态登录页不要求数据库在线；执行数据库命令前按下节配置 `.env.local`。`.env.local` 已被忽略，不应提交真实密钥。
+打开 <http://127.0.0.1:3000>，与默认认证地址保持一致。首页登录页不要求数据库在线；执行数据库命令前按下节配置 `.env.local`。`.env.local` 已被忽略，不应提交真实密钥。
 
 ## 数据库与测试数据
 
@@ -109,3 +111,9 @@ GitHub Actions 在 push 和 pull request 上执行 `npm ci`、`npm run check`、
 ## 更新同步（第七步）
 
 在第二个终端进入 app 执行 `npm run sync:dev`，并在 .env.local 设置 NEXT_PUBLIC_ZERO_CACHE_URL（见示例）。首次启用前重启本地 PostgreSQL，使逻辑复制生效。界面显示连接状态；业务修改、撤销及权限变化通过 Zero 通知重新执行授权查询。运行 `npm run test:sync` 可重做隔离的双客户端实验。详见 [同步架构与结果](app/docs/sync.md)。
+
+## 部署与移交（第八步）
+
+大学私网 AWS 配置位于 `infra/terraform`，部署、迁移、回滚及恢复步骤见 [运行手册](ops/README.md)。先填写大学环境参数，再审阅实际部署计划；示例值不能直接用于部署。当前没有执行大学云端部署。
+
+在 app 中执行 `npm run test:restore` 可重做本地空库恢复演练，需 PostgreSQL 18 客户端和本地测试库权限。[交接记录](app/docs/handoff.md) 区分已验证内容和待大学完成事项；学生与教师操作见 [用户说明](app/docs/user-guide.md)。
