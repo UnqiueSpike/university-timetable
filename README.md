@@ -1,6 +1,6 @@
 # UniSchedule 课程表系统
 
-当前完成前三步：应用界面基础、PostgreSQL 测试数据、Better Auth 登录与 tRPC 服务端授权。学生和教师可使用本地测试账户真实登录、退出；公开注册、密码恢复和大学身份核实尚未接入。
+当前完成前四步应用流程：真实登录、服务端授权、本人周课表与课程详情。学生之间的数据隔离、容量 null/0、来源状态和窄屏布局已验证。Zero 完成独立小规模实验，尚未接入产品；大学 AWS 环境待提供。公开注册、密码恢复和大学身份核实尚未接入。
 
 ## 项目结构
 
@@ -28,7 +28,7 @@ app/                    独立 Next.js 工程
 .github/workflows/       类型、代码和正式构建检查
 ```
 
-`src/server/auth` 提供真实会话与共用授权，`src/server/api` 提供 tRPC account.me 和限定课程范围的教师入口。
+`src/server/auth` 提供真实会话与共用授权，`src/server/api` 提供 tRPC account.me、timetable.mine/getEntry 和限定课程范围的教师入口。
 
 ## 环境与安装
 
@@ -65,6 +65,12 @@ npm run test:db            # 独立临时数据库，测试后自动清理
 ## 登录与权限
 
 按 [认证说明](app/docs/auth.md) 设置随机 BETTER_AUTH_SECRET 和 BETTER_AUTH_URL，执行 `npm run auth:seed`，再启动应用。随机测试凭据存于被 Git 忽略的 `app/.local-accounts.json`；重复执行不会重设密码。
+
+## 个人课表
+
+用本地测试账户登录后进入对应工作区。切换到 **2026-09-21 所在周**：学生 A 看 COMP101，学生 B 看 MATH101，empty 学生无课程。支持日期切换、手动刷新、课程详情与来源；所有时间按 Australia/Sydney 展示。详见 [课表验收与接口说明](app/docs/timetable.md)。
+
+[Zero 实验和 AWS / Terraform 条件](experiments/zero/README.md)记录已验证同步路径、缓存失效边界、依赖问题及尚待大学确认的资源。实验有独立锁文件，不参与主应用安装与运行。
 
 ## 检查与正式运行
 

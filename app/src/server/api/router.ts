@@ -4,7 +4,12 @@ import { inArray } from "drizzle-orm";
 import { courses } from "../db/schema";
 import { requirePermission } from "../auth/authorization";
 import { protectedProcedure, router } from "./trpc";
+import { configuredCapacityPolicy, getTimetableEntry, rangeInput, studentTimetable } from "../services/timetable";
 export const appRouter = router({
+  timetable: router({
+    mine: protectedProcedure.input(rangeInput).query(async ({ctx, input}) => studentTimetable(ctx.db, ctx.principal, input, (await ctx.auth.$context).secret, configuredCapacityPolicy())),
+    getEntry: protectedProcedure.input(z.strictObject({entryId: z.uuid()})).query(({ctx, input}) => getTimetableEntry(ctx.db, ctx.principal, input.entryId, configuredCapacityPolicy())),
+  }),
   account: router({ me: protectedProcedure.input(z.void()).query(({ ctx }) => ctx.principal) }),
   staff: router({ courses: protectedProcedure.input(z.void()).query(async ({ ctx }) => {
     requirePermission(ctx.principal, "staff.access");
