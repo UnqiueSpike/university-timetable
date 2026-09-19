@@ -114,6 +114,8 @@ GitHub Actions 在 push 和 pull request 上执行 `npm ci`、`npm run check`、
 
 ## 部署与移交（第八步）
 
+逐条核对 US-01～US-07 是否满足、查看证据和执行人工复验，见 [用户故事验收验证报告](01_需求工程/05_用户故事验收验证报告.md)。
+
 大学私网 AWS 配置位于 `infra/terraform`，部署、迁移、回滚及恢复步骤见 [运行手册](ops/README.md)。先填写大学环境参数，再审阅实际部署计划；示例值不能直接用于部署。当前没有执行大学云端部署。
 
 在 app 中执行 `npm run test:restore` 可重做本地空库恢复演练，需 PostgreSQL 18 客户端和本地测试库权限。[交接记录](app/docs/handoff.md) 区分已验证内容和待大学完成事项；学生与教师操作见 [用户说明](app/docs/user-guide.md)。
