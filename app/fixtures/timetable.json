@@ -1,0 +1,146 @@
+{
+  "term": "2026-S2",
+  "version": 1,
+  "mode": "snapshot",
+  "complete": true,
+  "courses": [
+    {
+      "externalId": "comp101",
+      "code": "COMP101",
+      "name": "Introduction to Computing"
+    },
+    {
+      "externalId": "math101",
+      "code": "MATH101",
+      "name": "Foundations of Mathematics"
+    }
+  ],
+  "classes": [
+    {
+      "externalId": "comp-lecture",
+      "courseExternalId": "comp101",
+      "classCode": "L01",
+      "type": "Lecture",
+      "status": "active"
+    },
+    {
+      "externalId": "comp-lab",
+      "courseExternalId": "comp101",
+      "classCode": "P01",
+      "type": "Practical",
+      "status": "active"
+    },
+    {
+      "externalId": "math-lecture",
+      "courseExternalId": "math101",
+      "classCode": "L01",
+      "type": "Lecture",
+      "status": "active"
+    },
+    {
+      "externalId": "comp-cancelled",
+      "courseExternalId": "comp101",
+      "classCode": "L99",
+      "type": "Lecture",
+      "status": "cancelled"
+    }
+  ],
+  "entries": [
+    {
+      "externalId": "comp-lecture-sep21",
+      "classExternalId": "comp-lecture",
+      "startAt": "2026-09-21T09:00:00+10:00",
+      "endAt": "2026-09-21T10:00:00+10:00",
+      "location": "Demo Hall A",
+      "status": "active",
+      "sourceUpdatedAt": null
+    },
+    {
+      "externalId": "comp-lab-sep21",
+      "classExternalId": "comp-lab",
+      "startAt": "2026-09-21T11:00:00+10:00",
+      "endAt": "2026-09-21T12:00:00+10:00",
+      "location": "Demo Lab B",
+      "status": "active",
+      "sourceUpdatedAt": null
+    },
+    {
+      "externalId": "math-lecture-sep21",
+      "classExternalId": "math-lecture",
+      "startAt": "2026-09-21T13:00:00+10:00",
+      "endAt": "2026-09-21T14:00:00+10:00",
+      "location": "Demo Hall C",
+      "status": "active",
+      "sourceUpdatedAt": null
+    },
+    {
+      "externalId": "comp-cancelled-sep21",
+      "classExternalId": "comp-cancelled",
+      "startAt": "2026-09-21T15:00:00+10:00",
+      "endAt": "2026-09-21T16:00:00+10:00",
+      "location": "Demo Hall A",
+      "status": "cancelled",
+      "sourceUpdatedAt": null
+    }
+  ],
+  "memberships": [
+    {
+      "externalId": "a-comp",
+      "classExternalId": "comp-lecture",
+      "identityProvider": "synthetic",
+      "externalSubject": "student-a",
+      "status": "active"
+    },
+    {
+      "externalId": "a-lab",
+      "classExternalId": "comp-lab",
+      "identityProvider": "synthetic",
+      "externalSubject": "student-a",
+      "status": "active"
+    },
+    {
+      "externalId": "b-math",
+      "classExternalId": "math-lecture",
+      "identityProvider": "synthetic",
+      "externalSubject": "student-b",
+      "status": "active"
+    },
+    {
+      "externalId": "a-math-inactive",
+      "classExternalId": "math-lecture",
+      "identityProvider": "synthetic",
+      "externalSubject": "student-a",
+      "status": "inactive"
+    },
+    {
+      "externalId": "a-cancelled",
+      "classExternalId": "comp-cancelled",
+      "identityProvider": "synthetic",
+      "externalSubject": "student-a",
+      "status": "active"
+    }
+  ],
+  "capacities": [
+    {
+      "externalId": "comp-lecture-observation-1",
+      "classExternalId": "comp-lecture",
+      "total": null,
+      "available": null,
+      "observedAt": "2026-09-19T10:00:00+10:00"
+    },
+    {
+      "externalId": "comp-lab-observation-1",
+      "classExternalId": "comp-lab",
+      "total": 0,
+      "available": 0,
+      "observedAt": "2026-09-19T10:00:00+10:00"
+    },
+    {
+      "externalId": "math-lecture-observation-1",
+      "classExternalId": "math-lecture",
+      "total": 30,
+      "available": 0,
+      "observedAt": "2026-09-19T10:00:00+10:00"
+    }
+  ]
+}
