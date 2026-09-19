@@ -1,6 +1,6 @@
 # UniSchedule 课程表系统
 
-当前完成前三步：应用界面基础、PostgreSQL 测试数据、Better Auth 登录与 tRPC 服务端授权。学生和教师可使用本地测试账户真实登录、退出；公开注册、密码恢复和大学身份核实尚未接入。
+第一至第七步的本地应用流程已实现：登录与授权、本人课表、教师补充、目标公告与审计、指定接收人分享、比较、撤销及 Zero 自动更新。第八步提供 Terraform 配置、运维说明和本地恢复演练；尚未部署大学 AWS，尚未由接管人员验收。批准数据源、客户同步 SLA、正式身份开通仍待大学确认。公开注册、密码恢复和 SSO 未开放。
 
 ## 项目结构
 
@@ -25,10 +25,12 @@ app/                    独立 Next.js 工程
   components.json       shadcn/ui 配置
   .env.example          无密钥的环境变量说明
   package-lock.json     npm 依赖锁定文件
-.github/workflows/       类型、代码和正式构建检查
+infra/terraform/         大学私有 AWS 试点配置及 Provider 锁文件
+ops/                    部署、迁移、回滚及恢复流程
+.github/workflows/       类型、代码、构建、数据库及 IaC 检查
 ```
 
-`src/server/auth` 提供真实会话与共用授权，`src/server/api` 提供 tRPC account.me 和限定课程范围的教师入口。
+`src/server/auth` 提供真实会话与共用授权，`src/server/api` 提供 tRPC account.me、timetable.mine/getEntry 和限定课程范围的教师入口。
 
 ## 环境与安装
 
@@ -43,7 +45,7 @@ npm ci
 npm run dev
 ```
 
-打开 <http://localhost:3000>。当前首页就是登录页。静态登录页不要求数据库在线；执行数据库命令前按下节配置 `.env.local`。`.env.local` 已被忽略，不应提交真实密钥。
+打开 <http://127.0.0.1:3000>，与默认认证地址保持一致。首页登录页不要求数据库在线；执行数据库命令前按下节配置 `.env.local`。`.env.local` 已被忽略，不应提交真实密钥。
 
 ## 数据库与测试数据
 
@@ -65,6 +67,12 @@ npm run test:db            # 独立临时数据库，测试后自动清理
 ## 登录与权限
 
 按 [认证说明](app/docs/auth.md) 设置随机 BETTER_AUTH_SECRET 和 BETTER_AUTH_URL，执行 `npm run auth:seed`，再启动应用。随机测试凭据存于被 Git 忽略的 `app/.local-accounts.json`；重复执行不会重设密码。
+
+## 个人课表
+
+用本地测试账户登录后进入对应工作区。切换到 **2026-09-21 所在周**：学生 A 看 COMP101，学生 B 看 MATH101，empty 学生无课程。支持日期切换、手动刷新、课程详情与来源；所有时间按 Australia/Sydney 展示。详见 [课表验收与接口说明](app/docs/timetable.md)。
+
+[Zero 实验和 AWS / Terraform 条件](experiments/zero/README.md)记录已验证同步路径、缓存失效边界、依赖问题及尚待大学确认的资源。实验有独立锁文件，不参与主应用安装与运行。
 
 ## 检查与正式运行
 
@@ -91,3 +99,23 @@ GitHub Actions 在 push 和 pull request 上执行 `npm ci`、`npm run check`、
 人工验收：在桌面与窄屏打开首页，检查插画、表单与页脚，使用 Tab 导航，输入演示邮箱和密码、切换密码显示和复选框，再点击 Sign In 验证真实登录；Forgot password? 和 Sign up 应显示受控开通/联系支持提示。
 
 配置参考：[Next.js 安装文档](https://nextjs.org/docs/app/getting-started/installation)、[shadcn/ui Next.js 文档](https://ui.shadcn.com/docs/installation/next)。后续施工顺序见 `03_施工步骤/01_施工计划.md`。
+
+## 教师维护与公告（第五步）
+
+教师登录后可维护授权课程的补充信息，创建/编辑/发布/撤回公告，并在独立授权范围内查看审计。学生入口新增目标公告列表。规则、接口和复验方法见 [教师维护说明](app/docs/staff.md)。先运行迁移及 db:seed，以建立新增表和本地教师操作权限。
+
+## 分享与比较（第六步）
+
+学生入口提供 Shared Timetables / Compare Timetables。合成账户 A 和 B 可以互相选择，empty 账户不能读取其分享。支持忙闲或完整课程字段、明确同意、期限、复制链接和撤销；接收人必须登录。详见 [分享权限与验收](app/docs/sharing.md)。
+
+## 更新同步（第七步）
+
+在第二个终端进入 app 执行 `npm run sync:dev`，并在 .env.local 设置 NEXT_PUBLIC_ZERO_CACHE_URL（见示例）。首次启用前重启本地 PostgreSQL，使逻辑复制生效。界面显示连接状态；业务修改、撤销及权限变化通过 Zero 通知重新执行授权查询。运行 `npm run test:sync` 可重做隔离的双客户端实验。详见 [同步架构与结果](app/docs/sync.md)。
+
+## 部署与移交（第八步）
+
+逐条核对 US-01～US-07 是否满足、查看证据和执行人工复验，见 [用户故事验收验证报告](01_需求工程/05_用户故事验收验证报告.md)。
+
+大学私网 AWS 配置位于 `infra/terraform`，部署、迁移、回滚及恢复步骤见 [运行手册](ops/README.md)。先填写大学环境参数，再审阅实际部署计划；示例值不能直接用于部署。当前没有执行大学云端部署。
+
+在 app 中执行 `npm run test:restore` 可重做本地空库恢复演练，需 PostgreSQL 18 客户端和本地测试库权限。[交接记录](app/docs/handoff.md) 区分已验证内容和待大学完成事项；学生与教师操作见 [用户说明](app/docs/user-guide.md)。

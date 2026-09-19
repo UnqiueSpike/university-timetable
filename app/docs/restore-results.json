@@ -1,0 +1,30 @@
+{
+  "date": "2026-09-19T07:25:50.827Z",
+  "result": "PASS",
+  "database": "PostgreSQL 18 local isolated databases",
+  "tablesCompared": [
+    "user",
+    "account",
+    "session",
+    "course",
+    "class",
+    "student_class",
+    "timetable_entry",
+    "capacity_snapshot",
+    "staff_permission",
+    "share_recipient",
+    "share",
+    "sync_signal"
+  ],
+  "elapsedMs": 637,
+  "checks": [
+    "empty target restored from pg_dump custom archive",
+    "rows and hashed account data preserved",
+    "constraints restored",
+    "sessions cleared and shares revoked before reopening"
+  ],
+  "limitations": [
+    "AWS RDS point-in-time recovery not executed",
+    "university operators must reconcile authorization changes after the backup point"
+  ]
+}

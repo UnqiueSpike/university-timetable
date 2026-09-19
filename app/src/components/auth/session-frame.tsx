@@ -1,8 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { TRPCClientError } from "@trpc/client";
+import { SyncProvider } from "./sync-provider";
 import { authClient } from "@/lib/auth-client";
 import { api } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
@@ -28,8 +30,9 @@ export function SessionFrame({ principal, children }: { principal: Principal; ch
     };
     const timer = window.setInterval(check, 15000);
     window.addEventListener("focus", check);
+    window.addEventListener("unischedule:invalidate", check);
     window.addEventListener("online", check);
-    return () => { active = false; clearInterval(timer); window.removeEventListener("focus", check); window.removeEventListener("online", check); };
+    return () => { active = false; clearInterval(timer); window.removeEventListener("focus", check); window.removeEventListener("unischedule:invalidate", check); window.removeEventListener("online", check); };
   }, [principal]);
   async function signOut() {
     setHidden(true);
@@ -39,16 +42,20 @@ export function SessionFrame({ principal, children }: { principal: Principal; ch
       window.location.replace("/");
     } catch { setNotice("Sign out failed. Please retry to end your session."); }
   }
-  return <div className="min-h-svh bg-white">
-    <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-6 py-4">
-      <Link href="/workspace" className="font-bold">UniSchedule</Link>
-      <nav aria-label="Your workspaces" className="flex flex-wrap items-center gap-4 text-sm">
-        {principal.grants.some(g => g.permission === "timetable.read.own") && <Link href="/student">My timetable</Link>}
+  return <div className="workspace-shell">
+    <header className="workspace-sidebar">
+      <Link href="/workspace" className="workspace-brand"><Image src="/images/logo.png" alt="" width={32} height={32} />UniSchedule</Link>
+      <nav aria-label="Your workspaces" className="workspace-nav">
+        {principal.grants.some(g => g.permission === "timetable.read.own") && <Link href="/student"><Image src="/images/timetable/calendar.svg" alt="" width={16} height={16} />My timetable</Link>}
         {principal.grants.some(g => g.permission === "staff.access") && <Link href="/staff">Staff workspace</Link>}
-        <span>{principal.displayName}</span><Button size="sm" variant="link" onClick={signOut}>Sign out</Button>
+        {principal.grants.some(g=>g.permission==="timetable.read.own")&&<Link href="/student/announcements">Announcements</Link>}
+        {principal.grants.some(g=>g.permission==="announcement.manage")&&<Link href="/staff/announcements"><Image src="/images/workspace/management.svg" alt="" width={16} height={16} />Management</Link>}
+        {principal.grants.some(g=>g.permission==="audit.read")&&<Link href="/staff/audit"><Image src="/images/workspace/audit.svg" alt="" width={16} height={16} />Audit Log</Link>}
+        {principal.grants.some(g=>g.permission==="timetable.read.own")&&<><Link href="/student/shares">Shared Timetables</Link><Link href="/student/compare">Compare Timetables</Link></>}
+        <span className="workspace-profile">{principal.displayName}<small>{principal.email}</small></span><Button size="sm" variant="link" onClick={signOut}>Sign out</Button>
       </nav>
     </header>
     {notice && <div role="alert" className="p-6 text-sm">{notice} <Button variant="link" size="sm" onClick={() => router.refresh()}>Retry</Button></div>}
-    {!hidden && children}
+    <SyncProvider userId={principal.id}>{!hidden && children}</SyncProvider>
   </div>;
 }

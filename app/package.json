@@ -16,7 +16,10 @@
     "db:seed": "node --conditions=react-server --import tsx scripts/seed.ts",
     "db:inspect": "node --conditions=react-server --import tsx scripts/inspect.ts",
     "test:db": "node --conditions=react-server --import tsx --test tests/*.test.ts",
-    "auth:seed": "node --conditions=react-server --import tsx scripts/auth-seed.ts"
+    "auth:seed": "node --conditions=react-server --import tsx scripts/auth-seed.ts",
+    "sync:dev": "node --conditions=react-server --import tsx scripts/sync-dev.ts",
+    "test:sync": "node --conditions=react-server --import tsx scripts/verify-sync.mjs",
+    "test:restore": "node --conditions=react-server --import tsx scripts/verify-restore.ts"
   },
   "dependencies": {
     "@better-auth/drizzle-adapter": "1.7.5",
@@ -24,6 +27,7 @@
     "@js-temporal/polyfill": "0.5.1",
     "@radix-ui/react-dialog": "1.1.23",
     "@radix-ui/react-slot": "1.3.3",
+    "@rocicorp/zero": "1.9.0",
     "@trpc/client": "11.19.0",
     "@trpc/server": "11.19.0",
     "better-auth": "1.7.5",
@@ -60,6 +64,12 @@
   "overrides": {
     "@esbuild-kit/core-utils": {
       "esbuild": "0.25.12"
+    },
+    "@opentelemetry/core": "2.11.0",
+    "@opentelemetry/propagator-jaeger": "2.11.0",
+    "cloudevents": {
+      "uuid": "11.1.1"
     }
-  }
+  },
+  "type": "module"
 }

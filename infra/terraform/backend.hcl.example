@@ -1,0 +1,6 @@
+bucket = "REPLACE_UNIVERSITY_TERRAFORM_STATE_BUCKET"
+key = "unischedule/pilot/terraform.tfstate"
+region = "ap-southeast-2"
+encrypt = true
+use_lockfile = true
+# State bucket must have versioning, blocked public access and scoped IAM.

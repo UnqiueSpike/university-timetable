@@ -4,7 +4,8 @@ import { Pool } from "pg";
 import * as schema from "./schema";
 
 export function connectDatabase(connectionString: string) {
-  const pool = new Pool({ connectionString, max: 5, connectionTimeoutMillis: 5000 });
+  const pool = new Pool({ connectionString, max: 5, connectionTimeoutMillis: 5000, query_timeout: 10000, idleTimeoutMillis: 30000 });
+  pool.on("error",()=>console.error(JSON.stringify({event:"database_pool_error"})));
   return { db: drizzle(pool, { schema }), pool };
 }
 export type Database = ReturnType<typeof connectDatabase>["db"];
