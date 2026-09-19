@@ -101,3 +101,7 @@ GitHub Actions 在 push 和 pull request 上执行 `npm ci`、`npm run check`、
 ## 教师维护与公告（第五步）
 
 教师登录后可维护授权课程的补充信息，创建/编辑/发布/撤回公告，并在独立授权范围内查看审计。学生入口新增目标公告列表。规则、接口和复验方法见 [教师维护说明](app/docs/staff.md)。先运行迁移及 db:seed，以建立新增表和本地教师操作权限。
+
+## 分享与比较（第六步）
+
+学生入口提供 Shared Timetables / Compare Timetables。合成账户 A 和 B 可以互相选择，empty 账户不能读取其分享。支持忙闲或完整课程字段、明确同意、期限、复制链接和撤销；接收人必须登录。详见 [分享权限与验收](app/docs/sharing.md)。

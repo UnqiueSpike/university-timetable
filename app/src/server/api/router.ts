@@ -6,10 +6,19 @@ import { requirePermission } from "../auth/authorization";
 import { protectedProcedure, router } from "./trpc";
 import { configuredCapacityPolicy, getTimetableEntry, rangeInput, studentTimetable } from "../services/timetable";
 import * as staffService from "../services/staff";
+import * as shareService from "../services/shares";
 export const appRouter = router({
   timetable: router({
+    compare:protectedProcedure.input(shareService.readInput).query(async({ctx,input})=>shareService.readShare(ctx.db,ctx.principal,input,(await ctx.auth.$context).secret,true)),
     mine: protectedProcedure.input(rangeInput).query(async ({ctx, input}) => studentTimetable(ctx.db, ctx.principal, input, (await ctx.auth.$context).secret, configuredCapacityPolicy())),
     getEntry: protectedProcedure.input(z.strictObject({entryId: z.uuid()})).query(({ctx, input}) => getTimetableEntry(ctx.db, ctx.principal, input.entryId, configuredCapacityPolicy())),
+  }),
+  share:router({
+    recipients:protectedProcedure.input(z.void()).query(({ctx})=>shareService.recipients(ctx.db,ctx.principal)),
+    create:protectedProcedure.input(shareService.createInput).mutation(({ctx,input})=>shareService.createShare(ctx.db,ctx.principal,input)),
+    list:protectedProcedure.input(shareService.listInput).query(({ctx,input})=>shareService.listShares(ctx.db,ctx.principal,input)),
+    revoke:protectedProcedure.input(z.strictObject({shareId:z.uuid()})).mutation(({ctx,input})=>shareService.revokeShare(ctx.db,ctx.principal,input.shareId)),
+    read:protectedProcedure.input(shareService.readInput).query(async({ctx,input})=>{const r=await shareService.readShare(ctx.db,ctx.principal,input,(await ctx.auth.$context).secret);return {...r,items:r.items.map(i=>i.entry)};}),
   }),
   supplement: router({save:protectedProcedure.input(staffService.supplementInput).mutation(({ctx,input})=>staffService.saveSupplement(ctx.db,ctx.principal,input,ctx.requestId))}),
   announcement: router({

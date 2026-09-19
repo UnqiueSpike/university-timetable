@@ -125,3 +125,13 @@ export const auditEvents = pgTable("audit_event", {
   courseIds: uuid("course_ids").array().default(sql`'{}'::uuid[]`).notNull(), groupIds: uuid("group_ids").array().default(sql`'{}'::uuid[]`).notNull(),
   before: jsonb("before").$type<Record<string, unknown> | null>(), after: jsonb("after").$type<Record<string, unknown>>().notNull(),
 }, t => [index("audit_time_idx").on(t.occurredAt, t.id)]);
+
+// Explicit, administrator-maintained pair selection; never an unrestricted user directory.
+export const shareRecipients = pgTable("share_recipient", {
+  id:id(), ownerId:text("owner_id").notNull().references(()=>user.id),recipientId:text("recipient_id").notNull().references(()=>user.id),active:boolean("active").notNull().default(true),
+},t=>[unique().on(t.ownerId,t.recipientId),check("share_recipient_distinct",sql`${t.ownerId} <> ${t.recipientId}`)]);
+export const shares = pgTable("share", {
+  id:id(),ownerId:text("owner_id").notNull().references(()=>user.id),recipientId:text("recipient_id").notNull().references(()=>user.id),
+  from:instant("from_at").notNull(),to:instant("to_at").notNull(),allowedFields:text("allowed_fields").array().notNull(),
+  consentedAt:instant("consented_at").notNull().defaultNow(),expiresAt:instant("expires_at").notNull(),revokedAt:instant("revoked_at"),
+},t=>[index().on(t.ownerId,t.id),index().on(t.recipientId,t.id),check("share_distinct",sql`${t.ownerId} <> ${t.recipientId}`),check("share_time_range",sql`${t.from} < ${t.to} AND ${t.to} <= ${t.from} + interval '62 days'`),check("share_expiration",sql`${t.expiresAt} > ${t.consentedAt} AND ${t.expiresAt} <= ${t.consentedAt} + interval '30 days'`),check("share_fields",sql`${t.allowedFields} = ARRAY['startAt','endAt']::text[] OR ${t.allowedFields} = ARRAY['course','classType','startAt','endAt','location']::text[]`)]);

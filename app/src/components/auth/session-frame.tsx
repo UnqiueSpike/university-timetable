@@ -49,6 +49,7 @@ export function SessionFrame({ principal, children }: { principal: Principal; ch
         {principal.grants.some(g=>g.permission==="timetable.read.own")&&<Link href="/student/announcements">Announcements</Link>}
         {principal.grants.some(g=>g.permission==="announcement.manage")&&<Link href="/staff/announcements"><Image src="/images/workspace/management.svg" alt="" width={16} height={16} />Management</Link>}
         {principal.grants.some(g=>g.permission==="audit.read")&&<Link href="/staff/audit"><Image src="/images/workspace/audit.svg" alt="" width={16} height={16} />Audit Log</Link>}
+        {principal.grants.some(g=>g.permission==="timetable.read.own")&&<><Link href="/student/shares">Shared Timetables</Link><Link href="/student/compare">Compare Timetables</Link></>}
         <span className="workspace-profile">{principal.displayName}<small>{principal.email}</small></span><Button size="sm" variant="link" onClick={signOut}>Sign out</Button>
       </nav>
     </header>

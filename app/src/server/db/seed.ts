@@ -1,3 +1,4 @@
+import { shareRecipients } from "./schema";
 import "server-only";
 import { and, eq } from "drizzle-orm";
 import type { Database } from "./connection";
@@ -31,5 +32,6 @@ export async function seedFixtures(db: Database) {
   const [course] = await db.select().from(courses).where(and(eq(courses.sourceId, FIXTURE_SOURCE), eq(courses.externalId, "comp101")));
   await db.insert(userRoles).values({ userId: "test-teacher", role: "staff", scopeType: "course", courseId: course.id }).onConflictDoNothing();
   for (const permission of ["supplement.write", "announcement.manage", "audit.read"]) await db.insert(staffPermissions).values({userId: "test-teacher", permission, courseId: course.id}).onConflictDoNothing();
+  await db.insert(shareRecipients).values([{ownerId:"test-student-a",recipientId:"test-student-b"},{ownerId:"test-student-b",recipientId:"test-student-a"}]).onConflictDoNothing();
   return result;
 }
