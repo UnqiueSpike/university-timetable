@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { TRPCClientError } from "@trpc/client";
@@ -39,13 +40,13 @@ export function SessionFrame({ principal, children }: { principal: Principal; ch
       window.location.replace("/");
     } catch { setNotice("Sign out failed. Please retry to end your session."); }
   }
-  return <div className="min-h-svh bg-white">
-    <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-6 py-4">
-      <Link href="/workspace" className="font-bold">UniSchedule</Link>
-      <nav aria-label="Your workspaces" className="flex flex-wrap items-center gap-4 text-sm">
-        {principal.grants.some(g => g.permission === "timetable.read.own") && <Link href="/student">My timetable</Link>}
+  return <div className="workspace-shell">
+    <header className="workspace-sidebar">
+      <Link href="/workspace" className="workspace-brand"><Image src="/images/logo.png" alt="" width={32} height={32} />UniSchedule</Link>
+      <nav aria-label="Your workspaces" className="workspace-nav">
+        {principal.grants.some(g => g.permission === "timetable.read.own") && <Link href="/student"><Image src="/images/timetable/calendar.svg" alt="" width={16} height={16} />My timetable</Link>}
         {principal.grants.some(g => g.permission === "staff.access") && <Link href="/staff">Staff workspace</Link>}
-        <span>{principal.displayName}</span><Button size="sm" variant="link" onClick={signOut}>Sign out</Button>
+        <span className="workspace-profile">{principal.displayName}<small>{principal.email}</small></span><Button size="sm" variant="link" onClick={signOut}>Sign out</Button>
       </nav>
     </header>
     {notice && <div role="alert" className="p-6 text-sm">{notice} <Button variant="link" size="sm" onClick={() => router.refresh()}>Retry</Button></div>}

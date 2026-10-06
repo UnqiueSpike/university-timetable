@@ -1,0 +1,46 @@
+{
+  "date": "2026-09-19T06:39:04.161Z",
+  "zero": "1.9.0",
+  "node": "v22.14.0",
+  "platform": "darwin",
+  "results": [
+    {
+      "name": "two authenticated clients receive only their own active classes",
+      "result": "PASS"
+    },
+    {
+      "name": "forged client userID cannot override the authenticated session identity",
+      "result": "PASS"
+    },
+    {
+      "name": "existing importer -> PostgreSQL -> Zero -> authorized client",
+      "result": "PASS"
+    },
+    {
+      "name": "membership revocation removes visible data without affecting other student",
+      "result": "PASS"
+    },
+    {
+      "name": "role revocation removes visible data",
+      "result": "PASS"
+    },
+    {
+      "name": "new connection revalidates session and rejects logged-out credentials",
+      "result": "PASS"
+    },
+    {
+      "name": "reauthentication resumes authorized sync",
+      "result": "PASS"
+    },
+    {
+      "name": "same client after transport loss reauthenticates and rejects the revoked session",
+      "result": "PASS"
+    },
+    {
+      "name": "local cache on authentication failure",
+      "result": "OBSERVED",
+      "retainedRows": 2,
+      "requirement": "Host must hide data and close the memory-only Zero instance on needs-auth/logout; Zero alone is not a UI revocation boundary."
+    }
+  ]
+}

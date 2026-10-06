@@ -37,3 +37,37 @@
   body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); }
   button, input { -webkit-tap-highlight-color: transparent; }
 }
+
+.workspace-shell { min-height: 100svh; padding-left: 220px; }
+.workspace-sidebar { position: fixed; inset: 0 auto 0 0; width: 220px; border-right: 1px solid #eaeaea; padding: 28px 20px 20px; display:flex; flex-direction:column; background:white; }
+.workspace-brand { display:flex; align-items:center; gap:10px; font-size:15px; font-weight:700; letter-spacing:-.4px; }
+.workspace-nav { display:flex; flex-direction:column; gap:8px; margin-top:36px; flex:1; font-size:13px; }
+.workspace-nav>a { display:flex; align-items:center; gap:10px; background:#f7f7f7; padding:10px 12px; border-radius:6px; }
+.workspace-profile { margin-top:auto; padding:16px 0 6px; font-weight:600; }
+.workspace-profile small { display:block; color:#888; font-size:10px; font-weight:400; margin-top:4px; overflow-wrap:anywhere; }
+.timetable-toolbar { min-height:72px; padding:18px 24px; border-bottom:1px solid #eaeaea; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+.timetable-toolbar h1 { font-size:15px; font-weight:600; }
+.week-label { color:#777; font-size:13px; }
+.calendar-control { border:1px solid #e5e5e5; border-radius:6px; min-width:30px; height:30px; display:inline-flex; align-items:center; justify-content:center; font-size:12px; background:white; cursor:pointer; }
+.calendar-control:hover { background:#f5f5f5; }
+button:focus-visible, a:focus-visible { outline:2px solid var(--ring); outline-offset:3px; }
+.date-picker { font-size:12px; border:1px solid #e5e5e5; border-radius:6px; height:30px; padding:0 8px; max-width:150px; }
+.timetable-meta { display:flex; justify-content:space-between; gap:12px; color:#888; font-size:11px; padding:16px 24px 8px; }
+.source-banner { margin:4px 24px; padding:8px 12px; background:#fbf8ef; color:#75613b; font-size:11px; border-radius:6px; }
+.week-calendar { margin:0 24px 24px; display:grid; }
+.day-heading { height:86px; border-bottom:1px solid #eaeaea; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; font-size:11px; color:#999; }
+.day-heading strong { font-size:22px; font-weight:600; color:#333; }
+.day-heading.today strong { background:#e64626; color:white; border-radius:50%; width:34px; height:34px; text-align:center; line-height:34px; }
+.time-axis>div { height:60px; font-size:10px; color:#aaa; padding-top:3px; }
+.day-column { position:relative; border-left:1px solid #eee; }
+.hour-lines>div { height:60px; border-bottom:1px solid #eee; }
+.course-position { position:absolute; padding:1px 3px; }
+.course-card { text-align:left; border-radius:6px; border-left:3px solid; padding:6px 8px; width:100%; height:100%; display:flex; flex-direction:column; gap:3px; cursor:pointer; overflow:hidden; }
+.palette-0 { background:#eaf1fe; border-color:#7c9fe8; color:#385380; }.palette-1 { background:#eaf6ed; border-color:#85b28d; color:#3c6849; }.palette-2 { background:#fdf4df; border-color:#d5b66e; color:#806b35; }.palette-3 { background:#fcece7; border-color:#d9a18a; color:#875c48; }
+.course-card-title { display:flex; flex-wrap:wrap; justify-content:space-between; gap:3px; font-size:12px; font-weight:600; }.course-card-title>span { font-size:9px; font-weight:400; }.course-card-name { font-size:10px; }.course-card-time { font-size:10px; font-variant-numeric:tabular-nums; }.course-card-place { display:flex; gap:4px; font-size:10px; }.course-card-place img { width:12px; height:12px; }
+.course-position .course-card-name { display:none; }
+.calendar-message { min-height:440px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:24px; text-align:center; }.calendar-message h2 { font-size:20px; font-weight:600; }.calendar-message p { color:#888; font-size:13px; }
+.loading-bars { height:80px; width:180px; background:linear-gradient(110deg,#f8f8f8,#eee,#f8f8f8); background-size:200% 100%; animation:loading 1.3s infinite; border-radius:8px; }@keyframes loading { to { background-position:-200% 0; } }@media(prefers-reduced-motion:reduce){.loading-bars{animation:none}}
+.mobile-agenda { display:none; }.detail-overlay { position:fixed; inset:0; background:#1112; z-index:40; }.detail-drawer { position:fixed; z-index:50; right:0; top:0; height:100svh; width:380px; max-width:100vw; overflow-y:auto; background:white; border-left:1px solid #e5e5e5; box-shadow:-10px 0 40px #00000008; }.detail-close { position:absolute; right:20px; top:20px; font-size:24px; width:32px; height:32px; border-radius:50%; color:#888; cursor:pointer; }.detail-heading { padding:30px 24px 24px; border-bottom:1px solid #eee; }.detail-heading h2 { margin-top:12px; font-size:23px; font-weight:600; }.detail-heading p { color:#888; font-size:13px; margin-top:4px; }.class-tag { background:#eaf1fe; border-radius:5px; padding:4px 8px; color:#5579b7; font-size:10px; }.detail-drawer section { padding:22px 24px; border-bottom:1px solid #eee; }.detail-drawer h3 { text-transform:uppercase; font-size:10px; letter-spacing:1px; color:#888; font-weight:600; margin-bottom:16px; }.detail-fields>div { display:flex; justify-content:space-between; gap:16px; font-size:12px; margin:14px 0; }.detail-fields dt { color:#999; flex-shrink:0; }.detail-fields dd { text-align:right; overflow-wrap:anywhere; }.detail-hint { font-size:11px; color:#888; line-height:1.7; }
+@media(max-width:1000px){.workspace-shell{padding-left:180px}.workspace-sidebar{width:180px;padding:24px 14px}.week-label{display:none}.week-calendar{margin:0 12px 20px}.timetable-toolbar{padding:16px}.course-card{padding:5px}}
+@media(max-width:767px){.workspace-shell{padding:0}.workspace-sidebar{position:static;width:100%;padding:16px;border-right:0;border-bottom:1px solid #eee}.workspace-nav{margin-top:16px;flex-direction:row;align-items:center;flex-wrap:wrap;font-size:11px}.workspace-profile{margin:0;padding:0;flex:1}.workspace-profile small{display:none}.workspace-nav>a{padding:8px}.workspace-nav button{padding:0;font-size:11px}.timetable-toolbar{gap:12px}.week-label{display:inline;font-size:11px}.timetable-toolbar h1{font-size:14px}.date-picker{max-width:130px}.week-calendar{display:none}.mobile-agenda{display:block;padding:8px 20px 30px}.mobile-agenda section{margin:24px 0}.mobile-agenda h2{font-size:12px;font-weight:600;margin-bottom:12px}.mobile-agenda section>p{color:#aaa;font-size:12px}.mobile-agenda .course-card{padding:12px;margin:8px 0;gap:5px}.mobile-agenda .course-card-title{font-size:14px}.mobile-agenda .course-card-time{font-size:12px}.calendar-message{min-height:340px}.source-banner{margin:4px 16px}.timetable-meta{padding:16px}.detail-drawer{width:380px}}

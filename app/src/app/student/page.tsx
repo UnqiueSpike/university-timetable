@@ -1,6 +1,8 @@
 import { pagePrincipal } from "@/server/auth/page-session";
 import { SessionFrame } from "@/components/auth/session-frame";
+import { Timetable } from "@/components/timetable/timetable";
+export const metadata = { title: "My timetable · UniSchedule" };
 export default async function StudentPage() {
   const principal = await pagePrincipal("timetable.read.own");
-  return <SessionFrame principal={principal}><main className="p-8"><h1 className="text-2xl font-bold">My timetable</h1><p className="mt-3">Welcome, {principal.displayName}. Your student workspace is ready.</p></main></SessionFrame>;
+  return <SessionFrame principal={principal}><Timetable /></SessionFrame>;
 }
