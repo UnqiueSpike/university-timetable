@@ -11,7 +11,8 @@ const t = initTRPC.context<Context>().create({
   },
 });
 export const router = t.router;
-export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
+export const protectedProcedure = t.procedure.use(async ({ ctx, next, type }) => {
+  if (type === "mutation" && ctx.headers.get("origin") !== new URL((await ctx.auth.$context).baseURL).origin) throw new TRPCError({ code: "FORBIDDEN" });
   const current = await ctx.auth.api.getSession({ headers: ctx.headers, query: { disableCookieCache: true } });
   if (!current) throw new TRPCError({ code: "UNAUTHORIZED" });
   return next({ ctx: { ...ctx, principal: await getPrincipal(ctx.db, current.user) } });

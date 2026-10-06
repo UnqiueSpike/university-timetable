@@ -10,3 +10,10 @@ coverage/
 .vercel/
 .local-postgres/
 .local-accounts.json
+
+.local-zero/
+*.tfstate*
+.terraform/
+*.tfplan
+infra/terraform/backend.hcl
+infra/terraform/*.tfvars

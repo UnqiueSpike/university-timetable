@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { TRPCClientError } from "@trpc/client";
+import { SyncProvider } from "./sync-provider";
 import { authClient } from "@/lib/auth-client";
 import { api } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
@@ -29,8 +30,9 @@ export function SessionFrame({ principal, children }: { principal: Principal; ch
     };
     const timer = window.setInterval(check, 15000);
     window.addEventListener("focus", check);
+    window.addEventListener("unischedule:invalidate", check);
     window.addEventListener("online", check);
-    return () => { active = false; clearInterval(timer); window.removeEventListener("focus", check); window.removeEventListener("online", check); };
+    return () => { active = false; clearInterval(timer); window.removeEventListener("focus", check); window.removeEventListener("unischedule:invalidate", check); window.removeEventListener("online", check); };
   }, [principal]);
   async function signOut() {
     setHidden(true);
@@ -46,10 +48,14 @@ export function SessionFrame({ principal, children }: { principal: Principal; ch
       <nav aria-label="Your workspaces" className="workspace-nav">
         {principal.grants.some(g => g.permission === "timetable.read.own") && <Link href="/student"><Image src="/images/timetable/calendar.svg" alt="" width={16} height={16} />My timetable</Link>}
         {principal.grants.some(g => g.permission === "staff.access") && <Link href="/staff">Staff workspace</Link>}
+        {principal.grants.some(g=>g.permission==="timetable.read.own")&&<Link href="/student/announcements">Announcements</Link>}
+        {principal.grants.some(g=>g.permission==="announcement.manage")&&<Link href="/staff/announcements"><Image src="/images/workspace/management.svg" alt="" width={16} height={16} />Management</Link>}
+        {principal.grants.some(g=>g.permission==="audit.read")&&<Link href="/staff/audit"><Image src="/images/workspace/audit.svg" alt="" width={16} height={16} />Audit Log</Link>}
+        {principal.grants.some(g=>g.permission==="timetable.read.own")&&<><Link href="/student/shares">Shared Timetables</Link><Link href="/student/compare">Compare Timetables</Link></>}
         <span className="workspace-profile">{principal.displayName}<small>{principal.email}</small></span><Button size="sm" variant="link" onClick={signOut}>Sign out</Button>
       </nav>
     </header>
     {notice && <div role="alert" className="p-6 text-sm">{notice} <Button variant="link" size="sm" onClick={() => router.refresh()}>Retry</Button></div>}
-    {!hidden && children}
+    <SyncProvider userId={principal.id}>{!hidden && children}</SyncProvider>
   </div>;
 }

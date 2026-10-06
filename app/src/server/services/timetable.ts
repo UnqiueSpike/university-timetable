@@ -4,7 +4,7 @@ import { and, asc, desc, eq, exists, gt, gte, inArray, lt, lte, or, sql } from "
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import type { Database } from "../db/connection";
-import { capacitySnapshots, classes, courses, dataSources, studentClasses, syncScopes, timetableEntries } from "../db/schema";
+import { supplements, capacitySnapshots, classes, courses, dataSources, studentClasses, syncScopes, timetableEntries } from "../db/schema";
 import { requireSelf, type Principal } from "../auth/authorization";
 
 const instant = z.iso.datetime({ offset: true });
@@ -30,6 +30,7 @@ async function serialize(db: Database, rows: Row[], policy?: CapacityPolicy) {
     .innerJoin(dataSources, eq(capacitySnapshots.sourceId, dataSources.id))
     .where(and(inArray(capacitySnapshots.classId, rows.map(r => r.class.id)), eq(capacitySnapshots.sourceId, policy.sourceId), lte(capacitySnapshots.observedAt, policy.asOf), gte(capacitySnapshots.observedAt, new Date(policy.asOf.getTime() - policy.maxAgeMs))))
     .orderBy(desc(capacitySnapshots.observedAt), capacitySnapshots.id) : [];
+  const notes = rows.length ? await db.select().from(supplements).where(inArray(supplements.entryId, rows.map(r=>r.entry.id))).orderBy(supplements.id) : [];
   const sourceInfo = (s: typeof dataSources.$inferSelect) => ({ id: s.id, name: s.name, kind: s.kind });
   return rows.map(row => {
     const snapshot = snapshots.find(s => s.capacity.classId === row.class.id);
@@ -38,13 +39,13 @@ async function serialize(db: Database, rows: Row[], policy?: CapacityPolicy) {
       startAt: row.entry.startAt.toISOString(), endAt: row.entry.endAt.toISOString(), location: row.entry.location,
       source: sourceInfo(row.source), verificationStatus: row.entry.verificationStatus, sourceUpdatedAt: row.entry.sourceUpdatedAt?.toISOString() ?? null, syncedAt: row.entry.syncedAt.toISOString(), sourceUpdateFailed: !!row.sync?.lastError,
       capacity: snapshot ? { total: snapshot.capacity.total, available: snapshot.capacity.available, observedAt: snapshot.capacity.observedAt.toISOString(), verificationStatus: snapshot.capacity.verificationStatus, source: sourceInfo(snapshot.source) } : null,
-      supplements: [] as { id: string; entryId: string; content: string; updatedAt: string; revision: number }[],
+      supplements: notes.filter(n=>n.entryId===row.entry.id).map(n=>({id:n.id,entryId:n.entryId,content:n.content,updatedAt:n.updatedAt.toISOString(),revision:n.revision})),
     };
   });
 }
 export type TimetableItem = Awaited<ReturnType<typeof serialize>>[number];
-export async function studentTimetable(db: Database, principal: Principal, raw: z.input<typeof rangeInput>, secret: string, capacityPolicy?: CapacityPolicy) {
-  requireSelf(principal, principal.id);
+export async function studentTimetable(db: Database, principal: Principal, raw: z.input<typeof rangeInput>, secret: string, capacityPolicy?: CapacityPolicy, staffCourseIds?: string[]) {
+  if (!staffCourseIds) requireSelf(principal, principal.id);
   const input = rangeInput.parse(raw);
   const from = new Date(input.from).toISOString(), to = new Date(input.to).toISOString();
   let after;
@@ -58,7 +59,7 @@ export async function studentTimetable(db: Database, principal: Principal, raw: 
       after = or(gt(timetableEntries.startAt, new Date(payload.startAt)), and(eq(timetableEntries.startAt, new Date(payload.startAt)), gt(timetableEntries.id, payload.id)));
     } catch { throw new TRPCError({ code: "BAD_REQUEST" }); }
   }
-  const rows = await baseQuery(db).where(and(ownMembership(db, principal), eq(classes.status, "active"), eq(timetableEntries.status, "active"), lt(timetableEntries.startAt, new Date(to)), gt(timetableEntries.endAt, new Date(from)), after)).orderBy(asc(timetableEntries.startAt), asc(timetableEntries.id)).limit(input.limit + 1);
+  const rows = await baseQuery(db).where(and((staffCourseIds ? (staffCourseIds.length ? inArray(classes.courseId, staffCourseIds) : sql`false`) : ownMembership(db, principal)), eq(classes.status, "active"), eq(timetableEntries.status, "active"), lt(timetableEntries.startAt, new Date(to)), gt(timetableEntries.endAt, new Date(from)), after)).orderBy(asc(timetableEntries.startAt), asc(timetableEntries.id)).limit(input.limit + 1);
   const page = rows.slice(0, input.limit);
   let nextCursor: string | null = null;
   if (rows.length > input.limit) {

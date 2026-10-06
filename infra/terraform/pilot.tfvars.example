@@ -1,0 +1,15 @@
+# University-controlled values only; this file cannot deploy unchanged.
+region = "ap-southeast-2"
+account_id = "REPLACE_WITH_UNIVERSITY_ACCOUNT"
+vpc_id = "vpc-REPLACE"
+private_subnet_ids = ["subnet-REPLACE-A", "subnet-REPLACE-B"]
+pilot_client_cidrs = ["10.0.0.0/16"] # replace with actual campus/VPN routes
+certificate_arn = "arn:aws:acm:ap-southeast-2:REPLACE:certificate/REPLACE"
+hosted_zone_id = "REPLACE_PRIVATE_ZONE"
+app_domain = "timetable.pilot.example.invalid"
+sync_domain = "sync.timetable.pilot.example.invalid"
+image = "REPLACE_UNIVERSITY_ECR_IMAGE_DIGEST"
+app_secret_arn = "REPLACE_APP_SECRET_ARN"
+zero_secret_arn = "REPLACE_ZERO_SECRET_ARN"
+secret_kms_key_arn = "REPLACE_SECRET_KMS_KEY_ARN"
+services_enabled = false

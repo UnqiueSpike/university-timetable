@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import {useSyncRevision} from "../auth/sync-provider";
 import Image from "next/image";
 import * as Dialog from "@radix-ui/react-dialog";
 import { TRPCClientError } from "@trpc/client";
@@ -21,13 +22,14 @@ function Capacity({ item }: { item: TimetableItem }) {
     {!c && <p className="detail-hint">No current capacity snapshot is available.</p>}</>;
 }
 function EntryDetail({ id, reload, close, restoreFocus }: { id: string; reload: number; close: () => void; restoreFocus: () => void }) {
+  const generation=reload+useSyncRevision();
   const [result, setState] = useState<{ item?: TimetableItem; error?: boolean; revision?: number }>({});
-  const state = result.revision === reload ? result : {};
+  const state = result.revision === generation ? result : {};
   useEffect(() => {
     let active = true;
-    api.timetable.getEntry.query({ entryId: id }).then(item => { if (active) setState({ item, revision: reload }); }).catch(error => { failed(error); if (active) setState({ error: true, revision: reload }); });
+    api.timetable.getEntry.query({ entryId: id }).then(item => { if (active) setState({ item, revision: generation }); }).catch(error => { failed(error); if (active) setState({ error: true, revision: generation }); });
     return () => { active = false; };
-  }, [id, reload]);
+  }, [id, generation]);
   return <Dialog.Portal><Dialog.Overlay className="detail-overlay" /><Dialog.Content className="detail-drawer" onCloseAutoFocus={event => { event.preventDefault(); restoreFocus(); }}>
     <Dialog.Title className="sr-only">Course details</Dialog.Title><Dialog.Description className="sr-only">Class time, location, capacity and data source.</Dialog.Description>
     <button className="detail-close" onClick={close} aria-label="Close course details">×</button>
@@ -37,7 +39,7 @@ function EntryDetail({ id, reload, close, restoreFocus }: { id: string; reload: 
       <section><h3>Class details</h3><dl className="detail-fields"><div><dt>Class type</dt><dd>{state.item.classType}</dd></div><div><dt>Date</dt><dd>{formatDate(campusDate(state.item.startAt), { weekday: "short", day: "numeric", month: "short" })}</dd></div><div><dt>Time</dt><dd>{campusTime(state.item.startAt)} – {campusTime(state.item.endAt)}{campusDate(state.item.endAt) !== campusDate(state.item.startAt) && <> ({campusDate(state.item.endAt)})</>}</dd></div><div><dt>Location</dt><dd>{state.item.location ?? "Not provided"}</dd></div></dl><p className="detail-hint">All times in {CAMPUS_ZONE}</p></section>
       <section><h3>Capacity</h3><Capacity item={state.item} /></section>
       <section><h3>Data source</h3><dl className="detail-fields"><div><dt>Source</dt><dd>{state.item.source.name}</dd></div><div><dt>Status</dt><dd>{sourceLabel(state.item.source.kind)}{state.item.source.kind !== "test" && ` · ${state.item.verificationStatus}`}</dd></div><div><dt>Source updated</dt><dd>{state.item.sourceUpdatedAt ? `${campusDate(state.item.sourceUpdatedAt)} ${campusTime(state.item.sourceUpdatedAt)}` : "Not provided"}</dd></div><div><dt>Last imported</dt><dd>{campusDate(state.item.syncedAt)} {campusTime(state.item.syncedAt)}</dd></div></dl>{state.item.sourceUpdateFailed && <p role="status" className="detail-hint">The latest source update failed. This is the last successfully imported record.</p>}</section>
-      <section><h3>Supplementary information</h3><p className="detail-hint">No supplementary information has been added.</p></section></>}
+      <section><h3>Supplementary information</h3>{state.item.supplements.length?state.item.supplements.map(note=><p key={note.id} className="detail-hint whitespace-pre-wrap break-words">{note.content}<br/>Revision {note.revision} · {campusDate(note.updatedAt)}</p>):<p className="detail-hint">No supplementary information has been added.</p>}</section></>}
   </Dialog.Content></Dialog.Portal>;
 }
 function Card({ item, select }: { item: TimetableItem; select: (button: HTMLButtonElement) => void }) {
@@ -47,16 +49,19 @@ function Card({ item, select }: { item: TimetableItem; select: (button: HTMLButt
 export function Timetable() {
   const [date, setDate] = useState(campusToday);
   const [reload, setReload] = useState(0);
-  const [state, setState] = useState<{ items: TimetableItem[]; loading: boolean; error: boolean }>({ items: [], loading: true, error: false });
+  const syncRevision=useSyncRevision();
+  const generation=reload;
+  const [stored, setState] = useState<{ items: TimetableItem[]; loading: boolean; error: boolean; generation?:number }>({ items: [], loading: true, error: false });
+  const state=stored.generation===generation?stored:{items:[],loading:true,error:false};
   const [selected, setSelected] = useState<string | null>(null);
   const trigger = useRef<HTMLButtonElement | null>(null);
   function select(item: TimetableItem, button: HTMLButtonElement) { trigger.current = button; setSelected(item.id); }
   const days = weekDates(date), { from, to } = weekRange(date);
   useEffect(() => {
     const abort = new AbortController();
-    loadAllPages(cursor => api.timetable.mine.query({ from, to, cursor, limit: 20 }, { signal: abort.signal })).then(items => { if (!abort.signal.aborted) { setState({ items, loading: false, error: false }); setSelected(current => items.some(i => i.id === current) ? current : null); } }).catch(error => { if (!abort.signal.aborted) { failed(error); setState({ items: [], loading: false, error: true }); setSelected(null); } });
+    loadAllPages(cursor => api.timetable.mine.query({ from, to, cursor, limit: 20 }, { signal: abort.signal })).then(items => { if (!abort.signal.aborted) { setState({ items, loading: false, error: false, generation }); setSelected(current => items.some(i => i.id === current) ? current : null); } }).catch(error => { if (!abort.signal.aborted) { failed(error); setState({ items: [], loading: false, error: true, generation }); setSelected(null); } });
     return () => abort.abort();
-  }, [from, to, reload]); // The normalized range is stable across render.
+  }, [from, to, generation,syncRevision]); // The normalized range is stable across render.
   function refresh() { setSelected(null); setState({ items: [], loading: true, error: false }); setReload(n => n + 1); }
   function navigate(next: string) { setSelected(null); setState({ items: [], loading: true, error: false }); setDate(next); setReload(n => n + 1); }
   // Revocations and database edits become visible on focus, reconnection and every 30 seconds.

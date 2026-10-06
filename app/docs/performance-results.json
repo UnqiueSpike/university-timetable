@@ -1,0 +1,29 @@
+{
+  "date": "2026-09-19T07:27:31.560Z",
+  "mode": "Next.js production build, loopback, synthetic data, 30 sequential warm requests per route",
+  "results": [
+    {
+      "path": "/api/health",
+      "requests": 30,
+      "p50Ms": 1.2,
+      "p95Ms": 3.8,
+      "maxMs": 4.9
+    },
+    {
+      "path": "/api/trpc/account.me",
+      "requests": 30,
+      "p50Ms": 2.5,
+      "p95Ms": 3.3,
+      "maxMs": 4.1
+    },
+    {
+      "path": "/api/trpc/timetable.mine",
+      "requests": 30,
+      "p50Ms": 4.2,
+      "p95Ms": 5.2,
+      "maxMs": 6.8
+    }
+  ],
+  "sessionChecks": "unauthenticated and signed-out requests rejected",
+  "limitations": "Not a concurrency/load test or university network SLA measurement"
+}

@@ -22,7 +22,7 @@ async function main() {
     try { execFileSync("initdb", ["-D", data, "-U", "unischedule", "--auth=scram-sha-256", `--pwfile=${pw}`, "--encoding=UTF8", "--locale=C"], { stdio: "inherit" }); }
     finally { unlinkSync(pw); }
   }
-  if (!existsSync(resolve(data, "postmaster.pid"))) execFileSync("pg_ctl", ["-D", data, "-l", resolve(root, "postgres.log"), "-o", "-h 127.0.0.1 -p 55432 -k ''", "-w", "start"], { stdio: "inherit" });
+  if (!existsSync(resolve(data, "postmaster.pid"))) execFileSync("pg_ctl", ["-D", data, "-l", resolve(root, "postgres.log"), "-o", "-h 127.0.0.1 -p 55432 -k '' -c wal_level=logical", "-w", "start"], { stdio: "inherit" });
   url.pathname = "/postgres";
   const pool = new Pool({ connectionString: url.toString() });
   try {

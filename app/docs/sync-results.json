@@ -1,0 +1,74 @@
+{
+  "date": "2026-09-19T07:09:00.958Z",
+  "zero": "1.9.0",
+  "node": "v22.14.0",
+  "platform": "darwin",
+  "results": [
+    {
+      "name": "Zero exposes only the current user opaque signal; no course, announcement or shared fields",
+      "result": "PASS"
+    },
+    {
+      "name": "forged Zero userID is rejected by the real session-bound endpoint",
+      "result": "PASS"
+    },
+    {
+      "name": "tRPC/Drizzle supplement commit automatically refreshes only authorized content",
+      "result": "PASS"
+    },
+    {
+      "name": "targeted announcements appear on publish and disappear on withdrawal",
+      "result": "PASS"
+    },
+    {
+      "name": "import adapter writes use the same transactional signal path",
+      "result": "PASS"
+    },
+    {
+      "name": "sharing revocation triggers recipient refresh and removes subsequent access",
+      "result": "PASS"
+    },
+    {
+      "name": "rolled back database writes produce no Zero success signal",
+      "result": "PASS"
+    },
+    {
+      "name": "membership revocation clears former timetable rows",
+      "result": "PASS"
+    },
+    {
+      "name": "role revocation invalidates protected queries",
+      "result": "PASS"
+    },
+    {
+      "name": "transport reconnection revalidates the database session",
+      "result": "PASS"
+    },
+    {
+      "name": "fresh authentication resumes the signal subscription",
+      "result": "PASS"
+    },
+    {
+      "name": "local latency evidence",
+      "result": "PASS",
+      "conditions": "PostgreSQL 18.6 + Zero 1.9.0, localhost, two separate memory clients, synthetic data; client refresh occurs only on Zero signals in this test",
+      "measure": [
+        {
+          "scenario": "staff supplement -> A",
+          "ms": 114
+        },
+        {
+          "scenario": "announcement publish -> A",
+          "ms": 109
+        },
+        {
+          "scenario": "share revoke -> B",
+          "ms": 107
+        }
+      ],
+      "targetMs": 5000,
+      "customerSla": "pending confirmation",
+      "queryRequests": 10
+    }
+  ]
+}
